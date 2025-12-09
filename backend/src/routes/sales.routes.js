@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { filterSales } = require("../services/sales.service");
 
-router.get("/sales", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await filterSales(req.query);
     res.json(data);

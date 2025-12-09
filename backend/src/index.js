@@ -1,13 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-
-const salesRoutes = require('./routes/sales.routes');
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 
 const app = express();
+
+// Allow frontend to access backend
 app.use(cors());
+
+// Allow JSON body parsing
 app.use(express.json());
 
-// Register Route
-app.use("/api", salesRoutes);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected ✔️"))
+  .catch(err => console.log("MongoDB Connection Error ❌", err));
 
-app.listen(5000, () => console.log("Backend running on port 5000"));
+// Routes
+const salesRoutes = require("./routes/sales.routes");
+app.use("/api/sales", salesRoutes);
+
+// Server start
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Backend Running on Port: ${PORT} 🚀`));

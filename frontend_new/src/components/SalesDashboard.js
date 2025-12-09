@@ -84,22 +84,39 @@ const SalesDashboard = () => {
   }), [searchParams]);
 
   const fetchSales = useCallback(async (queryState) => {
+  try {
     setLoading(true);
-    // Mock data for now (replace with real backend later)
-    const mockSales = Array(20).fill().map((_, i) => ({
-      _id: i,
-      date: new Date(Date.now() - i * 86400000),
-      customer: { name: `Customer ${i+1}`, phone: `123-${i+1}XXX` },
-      product: { name: `Product ${i%5 + 1}` },
-      quantity: Math.floor(Math.random() * 10) + 1,
-      finalAmount: (Math.random() * 1000 + 100).toFixed(2),
-      paymentMethod: ['Card', 'Cash', 'UPI'][i % 3],
-      orderStatus: ['Delivered', 'Pending', 'Cancelled'][i % 3]
-    }));
-    setSales(mockSales.slice((queryState.page - 1) * 10, queryState.page * 10));
-    setTotalPages(5);
+
+    const params = new URLSearchParams({
+      search: queryState.search || '',
+      region: queryState.filters.region.join(','),
+      gender: queryState.filters.gender.join(','),
+      ageMin: queryState.filters.ageMin,
+      ageMax: queryState.filters.ageMax,
+      category: queryState.filters.category.join(','),
+      paymentMethod: queryState.filters.paymentMethod.join(','),
+      sort: `${queryState.sort.field}_${queryState.sort.order}`,
+      page: queryState.page.toString(),
+      limit: '10'
+    });
+
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sales?${params.toString()}`);
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    setSales(result.data || []);
+    setTotalPages(result.totalPages || 1);
+
+  } catch (error) {
+    console.error("Error fetching sales:", error);
+  } finally {
     setLoading(false);
-  }, []);
+  }
+}, []);
 
   useEffect(() => {
     fetchSales(getQueryState());
