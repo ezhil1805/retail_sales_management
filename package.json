@@ -1,18 +1,16 @@
+
 {
-  "name": "retail_sales",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "retail_sales_management",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend_new"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "react-router-dom": "^7.10.1"
+    "install": "echo root install",
+    "start": "npm run start-backend",
+    "start-backend": "cd backend && node src/index.js",
+    "install-backend": "cd backend && npm install",
+    "install-frontend" : "cd frontend_new && npm install"
   }
 }
