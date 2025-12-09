@@ -5,8 +5,12 @@ const cors = require("cors");
 
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET"],
+}));
 // Allow frontend to access backend
-app.use(cors());
+//app.use(cors());
 
 // Allow JSON body parsing
 app.use(express.json());
