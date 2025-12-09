@@ -126,7 +126,7 @@ const SalesDashboard = () => {
         setSales(result.data || []);
         setTotalPages(result.totalPages || 1);
       } catch (error) {
-        console.error('Error fetching sales:', error);
+        console.error('Error fetching sales :', error);
       } finally {
         setLoading(false);
       }
